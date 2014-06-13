@@ -16,7 +16,7 @@ public class Vial extends PollingScript<ClientContext> {
 
     @Override
     public void poll() {
-        switch ( state()) {
+        switch (state()) {
             //FILL == Pain In My Ass
             case FILL:
                 if (fountain.inViewport() && !ctx.players.local().inMotion()) {
