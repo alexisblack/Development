@@ -6,19 +6,19 @@ import org.powerbot.script.rt6.*;
 
 import java.util.concurrent.Callable;
 
-@Script.Manifest(name="Vial", description="Fills Your Vials.")
+@Script.Manifest(name="Vial", description="Fills Your Vials At The Grand Exchange.")
 public class Vial extends PollingScript<ClientContext> {
     private int fountainId = 47150;
     private int vialId = 229;
     private int fvialId = 227;
+    final Component fill = ctx.widgets.component(1370, 37);
+    final GameObject fountain = ctx.objects.select().id(fountainId).nearest().poll();
 
     @Override
     public void poll() {
         switch (state()) {
-            //Fill == Pain In My Ass
+            //FILL == Pain In My Ass
             case FILL:
-                    final Component Fill = ctx.widgets.component(1370, 37);
-                    final GameObject fountain = ctx.objects.select().id(fountainId).nearest().poll();
                     if (fountain.inViewport() && !ctx.players.local().inMotion()) {
                         if (!ctx.hud.opened(Hud.Window.BACKPACK)) {
                             ctx.hud.open(Hud.Window.BACKPACK);
@@ -29,10 +29,10 @@ public class Vial extends PollingScript<ClientContext> {
                             Condition.wait(new Callable<Boolean>() {
                                 @Override
                                 public Boolean call() throws Exception {
-                                    return Fill.visible();
+                                    return fill.visible();
                                 }
                             }, 500, 10);
-                            Fill.click(true);
+                            fill.click(true);
                             Condition.wait(new Callable<Boolean>() {
                                 @Override
                                 public Boolean call() {
