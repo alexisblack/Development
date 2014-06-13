@@ -1,4 +1,3 @@
-
 import org.powerbot.script.Condition;
 import org.powerbot.script.PollingScript;
 import org.powerbot.script.Script;
@@ -8,24 +7,26 @@ import java.util.concurrent.Callable;
 
 @Script.Manifest(name="Vial", description="Fills Your Vials At The Grand Exchange.")
 public class Vial extends PollingScript<ClientContext> {
-    private int fountainId = 47150;
-    private int vialId = 229;
-    private int fvialId = 227;
+    private static final int fountainId = 47150;
+    private static final  int vialId = 229;
+    private static final int fvialId = 227;
     final Component fill = ctx.widgets.component(1370, 37);
     final GameObject fountain = ctx.objects.select().id(fountainId).nearest().poll();
+    final Item v = ctx.backpack.select().id(vialId).first().poll();
 
     @Override
     public void poll() {
-        switch (state()) {
+        switch ( state()) {
             //FILL == Pain In My Ass
             case FILL:
-                    if (fountain.inViewport() && !ctx.players.local().inMotion()) {
+                if (fountain.inViewport() && !ctx.players.local().inMotion()) {
                         if (!ctx.hud.opened(Hud.Window.BACKPACK)) {
                             ctx.hud.open(Hud.Window.BACKPACK);
                         }
-                        for (Item v : ctx.backpack.select().id(vialId).first()) {
-                            v.interact("Use");
-                            fountain.interact("Use");
+                    if (!ctx.backpack.itemSelected()) {
+                        v.interact("Use");
+                        fountain.interact("Use");
+                    }
                             Condition.wait(new Callable<Boolean>() {
                                 @Override
                                 public Boolean call() throws Exception {
@@ -39,7 +40,6 @@ public class Vial extends PollingScript<ClientContext> {
                                     return ctx.backpack.select().id(vialId).count() == 0;
                                 }
                             }, 1000, 20);
-                        }
                     }else {
                         if (!ctx.players.local().inMotion()) {
                             ctx.movement.step(fountain);
