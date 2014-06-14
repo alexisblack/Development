@@ -25,7 +25,7 @@ public class Vial extends PollingScript<ClientContext> {
                         }
                     if (!ctx.backpack.itemSelected()) {
                         v.interact("Use");
-                        fountain.interact("Use");
+                        fountain.interact("Use", "Fountain");
                     }
                             Condition.wait(new Callable<Boolean>() {
                                 @Override
